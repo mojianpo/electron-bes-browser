@@ -26,32 +26,34 @@
     <el-main class="browser-body">
       <router-view></router-view>
       <el-dialog
+        title="关于"
         :visible.sync="showAppInfo"
         :modal-append-to-body="true"
         >
         <app-info></app-info>
       </el-dialog>
+       <el-dialog
+        title="切换URL"
+        :visible.sync="showUrlInfo"
+        :modal-append-to-body="true"
+        width="500px"
+        >
+        <url-info @urlOk="urlOk"></url-info>
+      </el-dialog>
     </el-main>
   </el-container>
-  <!-- <el-footer class="browser-footer"
-    :height="theme.footerBarHeight"
-    :style="{
-
-    }"
-    ></el-footer> -->
 </el-container>
-
-
-
 </div>
 </template>
 
 <script>
 import AppInfo from '@/components/app-info'
+import UrlInfo from '@/components/url-info'
 export default {
-  name: 'vue-electron-chrome',
+  name: 'bes-electron-chrome',
   components: {
-    AppInfo
+    AppInfo,
+    UrlInfo
   },
   data () {
     return {
@@ -68,7 +70,8 @@ export default {
       name: (this.$config.APP_NAME || '') + ' ' + (this.$config.APP_VERSION || ''),
       title: this.$config.APP_TITLE || '',
       menu: null,
-      showAppInfo: false
+      showAppInfo: false,
+      showUrlInfo: false
     }
   },
   computed: {
@@ -82,11 +85,17 @@ export default {
     }
   },
   methods: {
+    urlOk (url) {
+      this.showUrlInfo = false
+      if (url && this.$root) {
+        this.$root.webview && this.$root.webview.loadURL(url)
+      }
+    },
     currentWindow () {
       return this.$electron.remote.getCurrentWindow()
     },
     handleFullScreen () {
-      var win = this.currentWindow()
+      let win = this.currentWindow()
       if (win.isFullScreen()) {
         win.setFullScreen(false)
       } else {
@@ -94,11 +103,11 @@ export default {
       }
     },
     handleMinimize () {
-      var win = this.currentWindow()
+      let win = this.currentWindow()
       win.minimize()
     },
     handleMaximize () {
-      var win = this.currentWindow()
+      let win = this.currentWindow()
       if (win.isMaximized()) {
         win.unmaximize()
       } else {
@@ -106,7 +115,7 @@ export default {
       }
     },
     handleClose () {
-      var win = this.currentWindow()
+      let win = this.currentWindow()
       if (confirm('你确定要关闭应用吗？')) {
         win.close()
       }
@@ -115,13 +124,13 @@ export default {
       this.menu.popup(this.currentWindow(), 0, 31)
     },
     initMenu () {
-      var that = this
-      var Menu = this.$electron.remote.Menu
-      var MenuItem = this.$electron.remote.MenuItem
-      var win = this.currentWindow()
+      let that = this
+      let Menu = this.$electron.remote.Menu
+      let MenuItem = this.$electron.remote.MenuItem
+      let win = this.currentWindow()
       // this.menu = Menu.setApplicationMenu(Menu.buildFromTemplate(MenuTemplate))
-      var skipTaskbar = this.$config.skipTaskbar
-      var contextMenuItem = [
+      let skipTaskbar = this.$config.skipTaskbar
+      let contextMenuItem = [
         {
           label: '返回',
           click: () => {
@@ -181,35 +190,33 @@ export default {
           }
         }
       ]
-      var contextMenu = new Menu()
+      let contextMenu = new Menu()
       for (let i in contextMenuItem) {
         contextMenu.append(new MenuItem(contextMenuItem[i]))
       }
       if (that.$config.contextmenu) {
         document.addEventListener('contextmenu', (e) => {
-          contextMenu.popup(this.currentWindow(), e.x, e.y)
+          contextMenu.popup(that.currentWindow(), e.x, e.y)
         })
       }
-      var menu = new Menu()
+      let menu = new Menu()
       menu.append(new MenuItem({
         label: '主页',
         click () {
-          if (this.$config.APP_URL) {
-            that.$root.webview && that.$root.webview.loadURL(this.$config.APP_URL)
+          if (that.$config.APP_URL) {
+            that.$root.webview && that.$root.webview.loadURL(that.$config.APP_URL)
           } else {
-            alert('主页未指定')
+            that.$root.webview && that.$root.webview.loadURL('https://www.baidu.com')
           }
         }
       }))
+      menu.append(new MenuItem({
+        label: '切换',
+        click () {
+          that.showUrlInfo = true
+        }
+      }))
       menu.append(new MenuItem({label: '调试', submenu: contextMenuItem}))
-      // menu.append(new MenuItem({
-      //   label: '视图',
-      //   submenu: [
-      //     {label: '缩小', role: 'zoomin'},
-      //     {label: '放大 ', role: 'zoomout'},
-      //     {label: '还原', role: 'resetzoom'}
-      //   ]
-      // }))
       menu.append(new MenuItem({label: '切换全屏', role: 'togglefullscreen'}))
       menu.append(new MenuItem({label: '关闭退出', role: 'quit'}))
       menu.append(new MenuItem({

@@ -3,8 +3,9 @@
     <img src="../assets/logo.svg" class="logo" alt="">
     <h1 class="title">{{title}}</h1>
     <p class="description">
-       基于Electron开发的应用浏览器，让WEB应用看起来更像原生应用一样COOL。<br/>
-      浏览器主题可定制，配置简单，实现了简单的网页浏览器功能。
+      基于Electron开发的应用浏览器，让WEB应用看起来像原生应用一样COOL<br/>
+      浏览器主题可定制，配置简单，实现了简单的网页浏览器功能<br/>
+      定制化修改根目录下配置文件：.env.js
     </p>
     <ul class="info">
       <li><strong>Electron: </strong><span>{{electron}}</span></li>
@@ -13,6 +14,7 @@
       <li><strong>v8: </strong><span>{{v8}}</span></li>
       <li><strong>Version: </strong><span>{{version}}</span></li>
     </ul>
+
     <p class="copyright"><a href="#" @click="open('https://www.github.com/mojianpo')">@mojianpo</a></p>
   </div>
 </template>
@@ -51,20 +53,22 @@ export default {
     width: 100%;
     background: #fff;
     text-align: center;
-    padding: 15px;
   }
   .app-info-box .logo{
-    max-width: 200px;
+    max-width: 100px;
   }
   .app-info-box .title{
-    font-size: 2.5rem;
+    font-size: 2rem;
     font-weight: 100;
+    margin: 0 auto;
   }
   .app-info-box .description{
     font-size: 1rem;
+    line-height: 35px;
+    text-align: center;
   }
   .app-info-box .info{
-    margin-top: 30px;
+    margin-top: 20px;
     display: block;
   }
   .app-info-box .info:after,
@@ -79,15 +83,9 @@ export default {
     margin-right: 5px;
   }
   .app-info-box .copyright{
-    margin-top: 20px;
+    margin-top: 15px;
     color: #666;
     font-size: 14px;
   }
-  .app-info-box .go{
-    margin: 0 auto;
-    margin-top: 20px;
-    text-align: center;
-    color: #333;
-    font-size: 16px;
-  }
+ 
 </style>
