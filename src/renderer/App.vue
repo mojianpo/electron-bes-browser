@@ -205,8 +205,6 @@ export default {
         click () {
           if (that.$config.APP_URL) {
             that.$root.webview && that.$root.webview.loadURL(that.$config.APP_URL)
-          } else {
-            that.$root.webview && that.$root.webview.loadURL('https://www.baidu.com')
           }
         }
       }))

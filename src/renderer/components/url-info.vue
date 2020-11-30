@@ -2,7 +2,7 @@
   <div class="url-info-box">
     <img src="../assets/logo.svg" class="logo" alt="" style="width: 80px;">
     <p class="description">
-     <el-form ref="form" :model="form" >
+     <el-form ref="form" >
         <el-form-item >
           <el-input v-model="APP_URL"></el-input>
         </el-form-item>

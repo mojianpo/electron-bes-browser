@@ -48,22 +48,14 @@ function createWindow () {
    */
   var options = Object.assign({
     icon: path.join(__dirname, '../renderer/assets/logo.svg'),
-    // frame: true,
-    title: ' BES Browser',
-    // height: 800,
-    // useContentSize: true,
-    // width: 1000,
-    autoHideMenuBar: true
-    // transparent: false,
-    // minimizable: true,
-    // maximizable: true,
-    // fullscreenable: true
+    title: ' BES Browser'
   }, winOptions)
 
   mainWindow = new BrowserWindow(options)
 
   mainWindow.loadURL(winURL)
-  console.log(winURL)
+
+  mainWindow.maximize()
 
   mainWindow.on('closed', () => {
     mainWindow = null
